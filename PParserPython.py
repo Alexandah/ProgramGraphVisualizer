@@ -4,28 +4,27 @@ import inspect
 import os
 
 class PParserPython(PParserInterface):
-    def check_node(self, node):
-
-    def parse(self):
+    def __init__(self, path):
+        super().__init__(path)
         self.root = None
-        self.nodes = {}
-        self.context = []
-        for rootdir, dirs, files in os.walk(self.path):
-            if self.root is None:
-                self.root = self.check_node(rootdir)
+        self.all_nodes = {}
+        self.dirs = []
+        self.files = []
+        self.classes = []
+        self.methods = []
+        self.context_stack = []
 
-    def parse_dir(self, dir):
-        pass
+    @property
+    def current_context(self):
+        if self.context_stack != []:
+            return self.context_stack[-1]
+        return None
 
-    def parse_file(self, file):
-        pass
+    def push_context(self, context):
+        self.context_stack += [context]
 
-    def parse_class(self, file):
-        pass
-    
-    def parse_method(self, file):
-        pass
-
+    def pop_context(self):
+        return self.context_stack.pop()
 
     def get_type(self, item):
         if inspect.ismodule(item):
@@ -37,20 +36,55 @@ class PParserPython(PParserInterface):
         else:
             return PNodeTypes.DIR
 
-    def parseDirsAndFiles(self, path):
-        for rootdir, dirs, files in os.walk(path):
-            if self.root == None:
-                self.root = self.get_node(rootdir)
+    def add_node(self, item, parent):
+        name = item.__name__ if hasattr(item, '__name__') else item
+        type = self.get_type(item)
+        new_node = PNode(name, parent, type)
+        if parent != None: 
+            parent.children += [new_node]
 
-            self.push_context(rootdir)
+        self.all_nodes[id(item)] = new_node
+        if new_node.type == PNodeTypes.DIR:
+            self.dirs += [new_node]
+        elif new_node.type == PNodeTypes.FILE:
+            self.files += [new_node]
+        elif new_node.type == PNodeTypes.CLASS:
+            self.classes += [new_node]
+        elif new_node.type == PNodeTypes.METHOD:
+            self.methods += [new_node]
 
+        return new_node
+
+    def handle_node(self, item):
+        if id(item) in self.all_nodes:
+            return self.all_nodes[id(item)]
+        elif item != None:
+            return self.add_node(item, self.current_context)
+        else:
+            return None
+
+    def parse(self):
+        for rootdir, dirs, files in os.walk(self.path):
+            current_dir = self.handle_node(rootdir)
+            if self.root is None:
+                self.root = current_dir
+
+            self.push_context(current_dir)
+            
             for dir in dirs:
-                dir_node = self.get_node(dir)
+                dir_node = self.handle_node(dir)
 
             for file in files:
                 if file.endswith(".py"):
                     module = __import__(file[:file.index(".py")])
-                    file_node = self.get_node(module)
+                    file_node = self.handle_node(module)
                     self.push_context(file_node)
-                    file_node.children += self.parseClassesAndMethods(module)
+                    file_node.children += self.parse_classes_and_methods(module)
                     self.pop_context()
+
+            self.pop_context()
+            
+            
+    def parse_classes_and_methods(self, module):
+        pass
+        
