@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from PNode import PNode 
+from PNode import DirNode, FileNode, ClassNode, MethodNode, ConstantNode 
+import os
 
 class PParserInterface(ABC):
     def __init__(self, path):
@@ -20,31 +21,33 @@ class PParserInterface(ABC):
     def pop_context(self):
         return self.context_stack.pop()
 
-    @abstractmethod
-    def get_type(self, item):
-        pass
+    def add_node(self, node):
+        self.all_nodes[node.name] = node
+        if self.current_context != None:
+            self.current_context.add_def(node)
 
-    def add_node(self, item, parent):
-        name = item.__name__ if hasattr(item, '__name__') else item
-        type = self.get_type(item)
-        new_node = PNode(name, parent, type)
-        if parent != None: 
-            parent.children += [new_node]
-        self.all_nodes[id(item)] = new_node
-        return new_node
-
-    def get_node(self, item):
-        if id(item) in self.all_nodes:
-            return self.all_nodes[id(item)]
-        elif item != None:
-            return self.add_node(item, self.current_context)
+    def check_in_xor_get_node(self, node):
+        if node.name in self.all_nodes:
+            return self.all_nodes[node.name]
         else:
-            return None
+            return self.add_node(node)
+
+    def __call__(self):
+        return self.parse()
+
+    def parse(self):
+        for rootdir, dirs, files in os.walk(self.path):
+            current_dir = self.check_in_xor_get_node(DirNode(rootdir))
+            if self.root == None:
+                self.root = current_dir
+            self.push_context(current_dir)
+
+            for dir in dirs:
+                dir_node = self.check_in_xor_get_node(DirNode(os.path.join(rootdir, dir)))
+
+            for file in files:
+                file_node = self.check_in_xor_get_node(self.parse_file(os.path.join(rootdir, file)))
 
     @abstractmethod
-    def parseDirsAndFiles(self, path):
-        pass
-
-    @abstractmethod
-    def parseClassesAndMethods(self, file):
+    def parse_file(self, file) -> FileNode:
         pass
