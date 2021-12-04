@@ -34,12 +34,28 @@ class PParserPython(PParserInterface):
             module = __import__(file[:file.index('.py')])
             contains = self.get_contained_nodes(module)
             name = module.__name__
-            defines = []
-            calls = []
 
             file_node = FileNode(name)
-            for cls in classes:
-                defines.append(self.parse_class(cls))
+            self.push_context(file_node)
+
+            #Handle definitions
+            for cls in contains['classes']:
+                class_node = self.parse_class(cls)
+                self.check_in_xor_get_node(class_node)
+
+            for method in contains['methods']:
+                method_node = self.parse_method(method)
+                self.check_in_xor_get_node(method_node)
+
+            for constant in contains['constants']:
+                constant_node = self.parse_constant(constant)
+                self.check_in_xor_get_node(constant_node)
+
+            #Handle calls
+            
+
+            self.pop_context()
+            return file_node
                     
     def parse_class(self, _class) -> ClassNode:
         contains = self.get_contained_nodes(_class)
@@ -47,6 +63,24 @@ class PParserPython(PParserInterface):
         defines = []
         calls = []
         extends = []
+        
+        class_node = ClassNode(name)
+        self.push_context(class_node)
+
+        for cls in contains['classes']:
+            class_node = self.parse_class(cls)
+            self.check_in_xor_get_node(class_node)
+
+        for method in contains['methods']:
+            method_node = self.parse_method(method)
+            self.check_in_xor_get_node(method_node)
+
+        for constant in contains['constants']:
+            constant_node = self.parse_constant(constant)
+            self.check_in_xor_get_node(constant_node)
+
+        self.pop_context()
+        return file_node
         pass
 
     def parse_method(self, method) -> MethodNode:
