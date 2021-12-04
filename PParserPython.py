@@ -2,93 +2,52 @@ from PParserInterface import PParserInterface
 from PNode import ClassNode, MethodNode, ConstantNode, FileNode
 import inspect
 import os
+import ast
 
 class PParserPython(PParserInterface):
     def __init__(self, path):
         super().__init__(path)
     
-    def get_contained_nodes(self, obj):
-        classes = {}
-        methods = {}
-        constants = {}
-        for item in dir(obj):
-            attribute = getattr(obj, item)
-            if inspect.isclass(attribute):
-                if type(self.current_context) is ClassNode:
-                    continue
-                classes[item] = attribute
-            elif inspect.ismethod(attribute):
-                if type(self.current_context) is MethodNode:
-                    continue
-                methods[item] = attribute
-            elif not "_" in item:
-                constants[item] = {'val': attribute, 'name': item}
-        return {
-            'classes': classes,
-            'methods': methods,
-            'constants': constants
-        }
+    def parse_file(self, filename):
+        if filename.endswith(".py"):
+            with open(filename, "r") as file:
+                tree = ast.parse(file.read())
 
-    def parse_file(self, file) -> FileNode:
-        if file.endswith('.py'):
-            module = __import__(file[:file.index('.py')])
-            contains = self.get_contained_nodes(module)
-            name = module.__name__
+class ASTAnalyzer(ast.NodeVisitor):
+    def __init__(self):
+        self.classes = {}
+        self.methods = {}
+        self.constants = {}
+        self.files = {}
 
-            file_node = FileNode(name)
-            self.push_context(file_node)
+    def visit_ClassDef(self, node):
+        self.classes[node.name] = ClassNode(node.name)
+        for base in node.bases:
+            self.classes[node.name].add_extends(base)
 
-            #Handle definitions
-            for cls in contains['classes']:
-                class_node = self.parse_class(cls)
-                self.check_in_xor_get_node(class_node)
+    def visit_FunctionDef(self, node):
+        self.methods[node.name] = MethodNode(node.name)
 
-            for method in contains['methods']:
-                method_node = self.parse_method(method)
-                self.check_in_xor_get_node(method_node)
+    def visit_Assign(self, node):
+        for target in node.targets:
+            if isinstance(target, ast.Name):
+                self.constants[target.id] = ConstantNode(target.id)
+            elif isinstance(target, ast.Attribute):
+                self.constants[target.attr] = ConstantNode(target.attr)
+            else:
+                raise Exception("Unsupported target type: " + str(type(target)))
 
-            for constant in contains['constants']:
-                constant_node = self.parse_constant(constant)
-                self.check_in_xor_get_node(constant_node)
+    def visit_Call(self, node):
+        if isinstance(node.func, ast.Attribute):
+            if node.func.attr in self.methods:
+                self.methods[node.func.attr].add_call()
+            elif node.func.attr in self.constants:
+                self.constants[node.func.attr].add_call()
 
-            #Handle calls
-            
+if __name__ == "__main__":
+    analyzer = ASTAnalyzer()
+    for root, dirs, files in os.walk("."):
+        for file in files:
+            if file == "PParserPython.py":
+                print(analyzer.visit(ast.parse(open(file).read())))
 
-            self.pop_context()
-            return file_node
-                    
-    def parse_class(self, _class) -> ClassNode:
-        contains = self.get_contained_nodes(_class)
-        name = _class.__name__
-        defines = []
-        calls = []
-        extends = []
-        
-        class_node = ClassNode(name)
-        self.push_context(class_node)
-
-        for cls in contains['classes']:
-            class_node = self.parse_class(cls)
-            self.check_in_xor_get_node(class_node)
-
-        for method in contains['methods']:
-            method_node = self.parse_method(method)
-            self.check_in_xor_get_node(method_node)
-
-        for constant in contains['constants']:
-            constant_node = self.parse_constant(constant)
-            self.check_in_xor_get_node(constant_node)
-
-        self.pop_context()
-        return file_node
-        pass
-
-    def parse_method(self, method) -> MethodNode:
-        contains = self.get_contained_nodes(method)
-        name = method.__name__
-        calls = []
-        pass
-
-    def parse_constant(self, constant) -> ConstantNode:
-        name = constant['name']
-        self.check_in_xor_get_node(ConstantNode(name))
