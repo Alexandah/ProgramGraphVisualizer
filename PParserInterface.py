@@ -9,12 +9,13 @@ class PParserInterface(ABC):
         self.all_nodes = {}
         self.context_stack = []
     
+    # Current context is a PNode 
     @property
     def current_context(self):
         if self.context_stack != []:
             return self.context_stack[-1]
         return None
-
+    
     def push_context(self, context):
         self.context_stack += [context]
 
@@ -24,13 +25,15 @@ class PParserInterface(ABC):
     def add_node(self, node):
         self.all_nodes[node.name] = node
         if self.current_context != None:
-            self.current_context.add_def(node)
+            if self.current_context.can_def(node):
+                self.current_context.add_def(node)
 
     def check_in_xor_get_node(self, node):
         if node.name in self.all_nodes:
             return self.all_nodes[node.name]
         else:
-            return self.add_node(node)
+            self.add_node(node)
+            return node
 
     def __call__(self):
         return self.parse()
@@ -40,6 +43,7 @@ class PParserInterface(ABC):
             current_dir = self.check_in_xor_get_node(DirNode(rootdir))
             if self.root == None:
                 self.root = current_dir
+
             self.push_context(current_dir)
 
             for dir in dirs:
@@ -47,6 +51,8 @@ class PParserInterface(ABC):
 
             for file in files:
                 file_node = self.check_in_xor_get_node(self.parse_file(os.path.join(rootdir, file)))
+
+            self.pop_context()
 
     @abstractmethod
     def parse_file(self, file) -> FileNode:
