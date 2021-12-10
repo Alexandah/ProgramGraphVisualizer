@@ -1,59 +1,48 @@
 from abc import ABC, abstractmethod
 from PNode import DirNode, FileNode, ClassNode, MethodNode, ConstantNode 
+from PGraphBuilder import PGraphBuilder
 import os
 
 class PParserInterface(ABC):
     def __init__(self, path):
         self.path = path
-        self.root = None
-        self.all_nodes = {}
-        self.context_stack = []
-    
-    # Current context is a PNode 
-    @property
-    def current_context(self):
-        if self.context_stack != []:
-            return self.context_stack[-1]
-        return None
-    
-    def push_context(self, context):
-        self.context_stack += [context]
-
-    def pop_context(self):
-        return self.context_stack.pop()
-
-    def add_node(self, node):
-        self.all_nodes[node.name] = node
-        if self.current_context != None:
-            if self.current_context.can_def(node):
-                self.current_context.add_def(node)
-
-    def check_in_xor_get_node(self, node):
-        if node.name in self.all_nodes:
-            return self.all_nodes[node.name]
-        else:
-            self.add_node(node)
-            return node
+        self.pgraph_builder = PGraphBuilder()
 
     def __call__(self):
         return self.parse()
 
     def parse(self):
+        #First pass handles defs
         for rootdir, dirs, files in os.walk(self.path):
-            current_dir = self.check_in_xor_get_node(DirNode(rootdir))
-            if self.root == None:
-                self.root = current_dir
-
-            self.push_context(current_dir)
-
+            rootdirnode = DirNode(rootdir)
+            self.pgraph_builder.add_node(rootdirnode)
             for dir in dirs:
-                dir_node = self.check_in_xor_get_node(DirNode(os.path.join(rootdir, dir)))
+                dirnode = DirNode(os.path.join(rootdir, dir))
+                self.pgraph_builder.add_node(dirnode)
+                self.pgraph_builder.add_def(dirnode, rootdirnode)
 
             for file in files:
-                file_node = self.check_in_xor_get_node(self.parse_file(os.path.join(rootdir, file)))
+                self.parse_file_defs(os.path.join(rootdir, file))
 
-            self.pop_context()
+        #Second pass handles calls
+        for rootdir, dirs, files in os.walk(self.path):
+            #We only have to check the lowest level because
+            #the builder recursively adds all the calls to parents
+            for file in files:
+                self.parse_file_calls(os.path.join(rootdir, file))
+
+        return self.pgraph_builder.build_pgraph()
 
     @abstractmethod
-    def parse_file(self, file) -> FileNode:
+    def parse_file_defs(self, file):
+        """
+        Parses the file and adds all the defs to the builder
+        """
+        pass
+
+    @abstractmethod
+    def parse_file_calls(self, file):
+        """
+        Parses the file and adds all the calls to the builder
+        """
         pass

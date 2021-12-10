@@ -1,9 +1,9 @@
 from PNode import PNodeTypes
 
 class PGraph:
-    def __init__(self, root, all_nodes_dict):
+    def __init__(self, root, all_nodes):
         self.root = root
-        self.all_nodes = [v for k,v in all_nodes_dict.items()]
+        self.all_nodes = all_nodes
 
     def method_mode(self):
         #return a PGraph with method node dependencies
