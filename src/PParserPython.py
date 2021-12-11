@@ -11,7 +11,7 @@ class PParserPython(PParserInterface, ast.NodeVisitor):
         ast.NodeVisitor.__init__(self)
     
     def parse_file_defs(self, filename, parent_dir_node):
-        print('fucking daddy')
+        # print('fucking daddy')
         if filename.endswith(".py"):
             new_file_node = FileNode(filename)
             self.pgraph_builder.add_node(new_file_node)
@@ -19,9 +19,9 @@ class PParserPython(PParserInterface, ast.NodeVisitor):
             #No checking for nodes that files define in this version
 
     def parse_file_calls(self, filename):
-        print('fucking mommy')
+        # print('fucking mommy')
         if filename.endswith(".py"):
-            print(filename)
+            # print(filename)
             self.current_file = self.pgraph_builder.all_nodes[filename]
 
             with open(filename, "r") as file:
