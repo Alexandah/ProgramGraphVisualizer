@@ -30,8 +30,8 @@ class PGraphBuilder:
             self.all_nodes[node.name] = node
     
     def add_def(self, node, definedby):
-        if node.name in self.all_nodes:
-            node.add_def(definedby)
+        if node.name in self.all_nodes and definedby.name in self.all_nodes:
+            definedby.add_def(node)
 
     #Ensures that parent nodes keep track of who their children call
     def add_call(self, node, called_node):

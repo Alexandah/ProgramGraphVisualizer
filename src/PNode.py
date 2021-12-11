@@ -17,14 +17,17 @@ class PNode(ABC):
 
     def add_def(self, definition):
         if(not self.can_def(definition)):
-            raise Exception("Invalid definition add attempt")
+            raise Exception("Invalid definition add attempt w/ " + str(definition.name))
         self.defines.add(definition)
         definition.definedby = self
 
     def add_call(self, called_node):
         if(not self.can_call(called_node)):
-            raise Exception("Invalid call add attempt")
+            raise Exception("Invalid call add attempt w/ " + str(called_node.name))
         self.calls.add(called_node)
+
+    def __str__(self):
+        return self.name + ': ' + str(self.defines) + ' ' + str(self.calls)
 
     @abstractmethod
     def can_def(self, node) -> bool:

@@ -1,5 +1,3 @@
-from PNode import PNodeTypes
-
 class PGraph:
     def __init__(self, root, all_nodes):
         self.root = root

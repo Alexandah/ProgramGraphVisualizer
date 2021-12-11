@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from PNode import DirNode, FileNode, ClassNode, MethodNode, ConstantNode 
+from PNode import DirNode, FileNode 
 from PGraphBuilder import PGraphBuilder
 import os
 
@@ -22,7 +22,7 @@ class PParserInterface(ABC):
                 self.pgraph_builder.add_def(dirnode, rootdirnode)
 
             for file in files:
-                self.parse_file_defs(os.path.join(rootdir, file))
+                self.parse_file_defs(os.path.join(rootdir, file), rootdirnode)
 
         #Second pass handles calls
         for rootdir, dirs, files in os.walk(self.path):
@@ -34,7 +34,7 @@ class PParserInterface(ABC):
         return self.pgraph_builder.build_pgraph()
 
     @abstractmethod
-    def parse_file_defs(self, file):
+    def parse_file_defs(self, file, parent_dir_node):
         """
         Parses the file and adds all the defs to the builder
         """
