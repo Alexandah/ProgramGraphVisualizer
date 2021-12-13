@@ -28,6 +28,13 @@ class PParserPython(PParserInterface, ast.NodeVisitor):
     def visit_ImportFrom(self, node):
         print('visiting import from ', node.module)
         found_key = get_key_with_file_in_path(node.module, self.pgraph_builder.all_nodes)
+        #handles the relative import case
+        if found_key is None:
+            for alias in node.names:
+                found_key = get_key_with_file_in_path(alias.name, self.pgraph_builder.all_nodes)
+                if found_key is not None:
+                    break
+
         print('found key: ', found_key)
         if found_key is not None:
             print('adding call')

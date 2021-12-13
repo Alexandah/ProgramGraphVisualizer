@@ -67,11 +67,13 @@ class DirToPGraphTesterPython(unittest.TestCase):
     def test_calls(self):
         for x in self.pgraph.all_nodes.values():
             print('testing calls for : ' + x.name)
-            print(x.calls)
+            print([y for y in x.calls])
             if x.name == "testdir":
                 pass
             elif x.name == "testdir\\folder0":
-                pass
+                self.assertTrue(len(x.calls) == 2)
+                self.assertTrue("testdir" in x.calls)
+                self.assertTrue("testdir\\test0.py" in x.calls)
             elif x.name == "testdir\\folder1":
                 pass
             elif x.name == "testdir\\test0.py":

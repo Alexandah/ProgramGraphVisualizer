@@ -38,13 +38,19 @@ class PGraphBuilder:
     def add_call(self, node, called_node):
         if node.name in self.all_nodes and called_node.name in self.all_nodes:
             common_parent = self.find_common_parent(node, called_node)
+            print('common parent is: ', common_parent.name)
             current_caller_node = node
             current_node_to_call = called_node
-            while current_caller_node is not common_parent:
-                while current_node_to_call is not common_parent:
+            while True:
+                while True:
+                    print(current_caller_node.name, " calls ", current_node_to_call.name)
                     current_caller_node.add_call(current_node_to_call)
                     current_node_to_call = current_node_to_call.get_parent()
+                    if current_node_to_call is common_parent:
+                        break
                 current_caller_node = current_caller_node.get_parent()
+                if current_caller_node is common_parent and current_node_to_call is common_parent:
+                    break
 
     def build_pgraph(self):
         return PGraph(self.root, self.all_nodes)
