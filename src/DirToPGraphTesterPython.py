@@ -66,6 +66,7 @@ class DirToPGraphTesterPython(unittest.TestCase):
 
     def test_calls(self):
         for x in self.pgraph.all_nodes.values():
+            print('testing calls for : ' + x.name)
             print(x.calls)
             if x.name == "testdir":
                 pass

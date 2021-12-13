@@ -36,7 +36,7 @@ class PGraphBuilder:
 
     #Ensures that parent nodes keep track of who their children call
     def add_call(self, node, called_node):
-        if node in self.all_nodes and called_node in self.all_nodes:
+        if node.name in self.all_nodes and called_node.name in self.all_nodes:
             common_parent = self.find_common_parent(node, called_node)
             current_caller_node = node
             current_node_to_call = called_node
