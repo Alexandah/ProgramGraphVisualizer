@@ -14,12 +14,9 @@ class PParserInterface(ABC):
     def parse(self):
         #First pass handles defs
         for rootdir, dirs, files in os.walk(self.path):
-            print(rootdir)
-            rootdirnode = DirNode(rootdir)
-            self.pgraph_builder.add_node(rootdirnode)
+            rootdirnode = self.pgraph_builder.add_node(DirNode(rootdir))
             for dir in dirs:
-                dirnode = DirNode(os.path.join(rootdir, dir))
-                self.pgraph_builder.add_node(dirnode)
+                dirnode = self.pgraph_builder.add_node(DirNode(os.path.join(rootdir, dir)))
                 self.pgraph_builder.add_def(dirnode, rootdirnode)
 
             for file in files:

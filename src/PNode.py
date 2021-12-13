@@ -7,8 +7,8 @@ class PNode(ABC):
             raise Exception("Invalid call set")
         self.name = name
         self.definedby = definedby
-        self.defines = set(defines)
-        self.calls = set(calls)
+        self.defines = {x.name:x for x in defines}
+        self.calls = {x.name:x for x in calls}
 
     def get_parent(self):
         if self.definedby is None:
@@ -18,13 +18,13 @@ class PNode(ABC):
     def add_def(self, definition):
         if(not self.can_def(definition)):
             raise Exception("Invalid definition add attempt w/ " + str(definition.name))
-        self.defines.add(definition)
+        self.defines[definition.name] = definition
         definition.definedby = self
 
     def add_call(self, called_node):
         if(not self.can_call(called_node)):
             raise Exception("Invalid call add attempt w/ " + str(called_node.name))
-        self.calls.add(called_node)
+        self.calls[called_node.name] = called_node
 
     def __str__(self):
         return self.name + ': ' + str(self.defines) + ' ' + str(self.calls)

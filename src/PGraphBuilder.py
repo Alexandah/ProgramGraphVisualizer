@@ -28,6 +28,7 @@ class PGraphBuilder:
             self.root = node
         if node.name not in self.all_nodes:
             self.all_nodes[node.name] = node
+        return self.all_nodes[node.name]
     
     def add_def(self, node, definedby):
         if node.name in self.all_nodes and definedby.name in self.all_nodes:
@@ -46,5 +47,5 @@ class PGraphBuilder:
                 current_caller_node = current_caller_node.get_parent()
 
     def build_pgraph(self):
-        return PGraph(self.root, set(list(self.all_nodes.values())))
+        return PGraph(self.root, self.all_nodes)
 
