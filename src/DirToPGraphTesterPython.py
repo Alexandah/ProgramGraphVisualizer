@@ -69,10 +69,9 @@ class DirToPGraphTesterPython(unittest.TestCase):
             print('testing calls for : ' + x.name)
             print([y for y in x.calls])
             if x.name == "testdir":
-                pass
+                self.assertTrue(len(x.calls) == 0)
             elif x.name == "testdir\\folder0":
-                self.assertTrue(len(x.calls) == 2)
-                self.assertTrue("testdir" in x.calls)
+                self.assertTrue(len(x.calls) == 1)
                 self.assertTrue("testdir\\test0.py" in x.calls)
             elif x.name == "testdir\\folder1":
                 pass
@@ -86,7 +85,7 @@ class DirToPGraphTesterPython(unittest.TestCase):
                 self.assertTrue(len(x.calls) == 1)
                 self.assertTrue("testdir\\test0.py" in x.calls)
             elif x.name == "testdir\\folder1\\test3.py":
-                self.assertTrue(len(x.calls) == 0)
+                self.assertTrue(len(x.calls) == 1)
             elif x.name == "testdir\\test4.py":
                 self.assertTrue(len(x.calls) == 1)
                 self.assertTrue("testdir\\test0.py" in x.calls)
