@@ -2,6 +2,7 @@ class PGraph:
     def __init__(self, root, all_nodes):
         self.root = root
         self.all_nodes = all_nodes
+        self.active_nodes = all_nodes
 
     def method_mode(self):
         #return a PGraph with method node dependencies
