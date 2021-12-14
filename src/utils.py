@@ -1,8 +1,12 @@
+LINUX_SLASH = '/'
+WINDOWS_SLASH = '\\'
+FILE_SLASH = LINUX_SLASH
+
 def get_file_name_at_end_of_path(path):
     """
     Returns the file name at the end of a path.
     """
-    return path.split('\\')[-1]
+    return path.split(FILE_SLASH)[-1]
 
 def get_key_with_file_in_path(filename, dictionary):
     """

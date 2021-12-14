@@ -35,8 +35,9 @@ class PParserPython(PParserInterface, ast.NodeVisitor):
         if found_key is None:
             found_key = get_key_with_file_in_path(node.module, self.pgraph_builder.all_nodes)
 
-        imported_file = self.pgraph_builder.all_nodes[found_key]
-        self.pgraph_builder.add_call(self.current_file, imported_file)
+        if found_key is not None:
+            imported_file = self.pgraph_builder.all_nodes[found_key]
+            self.pgraph_builder.add_call(self.current_file, imported_file)
 
     def visit_Import(self, node):
         for alias in node.names:

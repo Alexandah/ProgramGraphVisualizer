@@ -1,7 +1,5 @@
 import graphviz
-from PGraph import PGraph
-from PNode import DirNode, FileNode
-from PGraphBuilder import PGraphBuilder
+from utils import get_file_name_at_end_of_path
 
 class PGraphVisualizer:
     def __init__(self, pgraph):
@@ -10,23 +8,9 @@ class PGraphVisualizer:
     def visualize(self):
         graph = graphviz.Digraph(format='png')
         for node in self.pgraph.active_nodes.values():
-            graph.node(node.name, node.name)
+            node_short_name = get_file_name_at_end_of_path(node.name)
+            graph.node(node_short_name, node_short_name)
             for dest in node.calls.values():
-                graph.edge(node.name, dest.name)
+                dest_short_name = get_file_name_at_end_of_path(dest.name)
+                graph.edge(dest_short_name, node_short_name)
         graph.render('graph.gv', view=True)
-
-if __name__ == '__main__':
-    root = DirNode('root')
-    a = FileNode('a')
-    b = FileNode('b')
-    builder = PGraphBuilder()
-    builder.add_node(root)
-    builder.add_node(a)
-    builder.add_node(b)
-    builder.add_def(a, root)
-    builder.add_def(b, root)
-    builder.add_call(a,b)
-    pgraph = builder.build_pgraph()
-    pgraph.dir_mode()
-    viz = PGraphVisualizer(pgraph)
-    viz.visualize()
