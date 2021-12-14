@@ -2,6 +2,10 @@ import unittest
 from PParserPython import PParserPython
 from PNode import FileNode, DirNode
 
+LINUX_SLASH = '/'
+WINDOWS_SLASH = '\\'
+FILE_SLASH = LINUX_SLASH
+
 class DirToPGraphTesterPython(unittest.TestCase):
     @classmethod
     def setUpClass(self):
@@ -31,36 +35,38 @@ class DirToPGraphTesterPython(unittest.TestCase):
 
     def test_defs(self):
         for x in self.pgraph.all_nodes.values():
+            print(x)
+            print('defines ', x.defines)
             if x.name == "testdir":
                 self.assertEqual(len(x.defines),5)
-                self.assertTrue("testdir\\test0.py" in x.defines)
-                self.assertTrue("testdir\\test1.py" in x.defines)
-                self.assertTrue("testdir\\test4.py" in x.defines)
-                self.assertTrue("testdir\\folder0" in x.defines)
-                self.assertTrue("testdir\\folder1" in x.defines)
-                self.assertFalse("testdir\\folder1\\test3.py" in x.defines)
-                self.assertFalse("testdir\\folder0\\test2.py" in x.defines)
-            elif x.name == "testdir\\folder0":
+                self.assertTrue("testdir"+FILE_SLASH+"test0.py" in x.defines)
+                self.assertTrue("testdir"+FILE_SLASH+"test1.py" in x.defines)
+                self.assertTrue("testdir"+FILE_SLASH+"test4.py" in x.defines)
+                self.assertTrue("testdir"+FILE_SLASH+"folder0" in x.defines)
+                self.assertTrue("testdir"+FILE_SLASH+"folder1" in x.defines)
+                self.assertFalse("testdir"+FILE_SLASH+"folder1"+FILE_SLASH+"test3.py" in x.defines)
+                self.assertFalse("testdir"+FILE_SLASH+"folder0"+FILE_SLASH+"test2.py" in x.defines)
+            elif x.name == "testdir"+FILE_SLASH+"folder0":
                 self.assertTrue(x.definedby.name == "testdir")
                 self.assertTrue(len(x.defines) == 1)
-                self.assertTrue("testdir\\folder0\\test2.py" in x.defines)
-            elif x.name == "testdir\\folder1":
+                self.assertTrue("testdir"+FILE_SLASH+"folder0"+FILE_SLASH+"test2.py" in x.defines)
+            elif x.name == "testdir"+FILE_SLASH+"folder1":
                 self.assertTrue(x.definedby.name == "testdir")
                 self.assertTrue(len(x.defines) == 1)
-                self.assertTrue("testdir\\folder1\\test3.py" in x.defines)
-            elif x.name == "testdir\\test0.py":
+                self.assertTrue("testdir"+FILE_SLASH+"folder1"+FILE_SLASH+"test3.py" in x.defines)
+            elif x.name == "testdir"+FILE_SLASH+"test0.py":
                 self.assertTrue(x.definedby.name == "testdir")
                 self.assertTrue(len(x.defines) == 0)
-            elif x.name == "testdir\\test1.py":
+            elif x.name == "testdir"+FILE_SLASH+"test1.py":
                 self.assertTrue(x.definedby.name == "testdir")
                 self.assertTrue(len(x.defines) == 0)
-            elif x.name == "testdir\\folder0\\test2.py":
-                self.assertTrue(x.definedby.name == "testdir\\folder0")
+            elif x.name == "testdir"+FILE_SLASH+"folder0"+FILE_SLASH+"test2.py":
+                self.assertTrue(x.definedby.name == "testdir"+FILE_SLASH+"folder0")
                 self.assertTrue(len(x.defines) == 0)
-            elif x.name == "testdir\\folder1\\test3.py":
-                self.assertTrue(x.definedby.name == "testdir\\folder1")
+            elif x.name == "testdir"+FILE_SLASH+"folder1"+FILE_SLASH+"test3.py":
+                self.assertTrue(x.definedby.name == "testdir"+FILE_SLASH+"folder1")
                 self.assertTrue(len(x.defines) == 0)
-            elif x.name == "testdir\\test4.py":
+            elif x.name == "testdir"+FILE_SLASH+"test4.py":
                 self.assertTrue(x.definedby.name == "testdir")
                 self.assertTrue(len(x.defines) == 0)
 
@@ -68,29 +74,29 @@ class DirToPGraphTesterPython(unittest.TestCase):
         for x in self.pgraph.all_nodes.values():
             if x.name == "testdir":
                 self.assertTrue(len(x.calls) == 0)
-            elif x.name == "testdir\\folder0":
+            elif x.name == "testdir"+FILE_SLASH+"folder0":
                 self.assertTrue(len(x.calls) == 1)
-                self.assertTrue("testdir\\test0.py" in x.calls)
-            elif x.name == "testdir\\folder1":
+                self.assertTrue("testdir"+FILE_SLASH+"test0.py" in x.calls)
+            elif x.name == "testdir"+FILE_SLASH+"folder1":
                 self.assertTrue(len(x.calls) == 2)
-                self.assertTrue("testdir\\folder0\\test2.py" in x.calls)
-                self.assertTrue("testdir\\folder0" in x.calls)
-            elif x.name == "testdir\\test0.py":
+                self.assertTrue("testdir"+FILE_SLASH+"folder0"+FILE_SLASH+"test2.py" in x.calls)
+                self.assertTrue("testdir"+FILE_SLASH+"folder0" in x.calls)
+            elif x.name == "testdir"+FILE_SLASH+"test0.py":
                 self.assertTrue(len(x.calls) == 0)
-            elif x.name == "testdir\\test1.py":
+            elif x.name == "testdir"+FILE_SLASH+"test1.py":
                 self.assertTrue(len(x.calls) == 2)
-                self.assertTrue("testdir\\test0.py" in x.calls)
-                self.assertTrue("testdir\\test4.py" in x.calls)
-            elif x.name == "testdir\\folder0\\test2.py":
+                self.assertTrue("testdir"+FILE_SLASH+"test0.py" in x.calls)
+                self.assertTrue("testdir"+FILE_SLASH+"test4.py" in x.calls)
+            elif x.name == "testdir"+FILE_SLASH+"folder0"+FILE_SLASH+"test2.py":
                 self.assertTrue(len(x.calls) == 1)
-                self.assertTrue("testdir\\test0.py" in x.calls)
-            elif x.name == "testdir\\folder1\\test3.py":
+                self.assertTrue("testdir"+FILE_SLASH+"test0.py" in x.calls)
+            elif x.name == "testdir"+FILE_SLASH+"folder1"+FILE_SLASH+"test3.py":
                 self.assertTrue(len(x.calls) == 2)
-                self.assertTrue("testdir\\folder0\\test2.py" in x.calls)
-                self.assertTrue("testdir\\folder0" in x.calls)
-            elif x.name == "testdir\\test4.py":
+                self.assertTrue("testdir"+FILE_SLASH+"folder0"+FILE_SLASH+"test2.py" in x.calls)
+                self.assertTrue("testdir"+FILE_SLASH+"folder0" in x.calls)
+            elif x.name == "testdir"+FILE_SLASH+"test4.py":
                 self.assertTrue(len(x.calls) == 1)
-                self.assertTrue("testdir\\test0.py" in x.calls)
+                self.assertTrue("testdir"+FILE_SLASH+"test0.py" in x.calls)
             
 
 
