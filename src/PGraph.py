@@ -1,3 +1,5 @@
+from PNode import DirNode, FileNode
+
 class PGraph:
     def __init__(self, root, all_nodes):
         self.root = root
@@ -5,25 +7,19 @@ class PGraph:
         self.active_nodes = all_nodes
 
     def method_mode(self):
-        #return a PGraph with method node dependencies
         pass
 
     def class_mode(self):
-        #return a PGraph with class node dependencies
         pass
 
     def file_mode(self):
-        #return a PGraph with file node dependencies
-        pass
+        self.active_nodes = {x.name:x for x in self.all_nodes.values() if isinstance(x, FileNode)}
 
     def dir_mode(self):
-        #return a PGraph with dir node dependencies
-        pass
+        self.active_nodes = {x.name:x for x in self.all_nodes.values() if isinstance(x, DirNode)}
 
     def up(self):
-        #return a PGraph with the next highest level of nodes
         pass
 
     def down(self):
-        #return a PGraph with the next lowest level of nodes
         pass
