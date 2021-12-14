@@ -66,15 +66,15 @@ class DirToPGraphTesterPython(unittest.TestCase):
 
     def test_calls(self):
         for x in self.pgraph.all_nodes.values():
-            print('testing calls for : ' + x.name)
-            print([y for y in x.calls])
             if x.name == "testdir":
                 self.assertTrue(len(x.calls) == 0)
             elif x.name == "testdir\\folder0":
                 self.assertTrue(len(x.calls) == 1)
                 self.assertTrue("testdir\\test0.py" in x.calls)
             elif x.name == "testdir\\folder1":
-                pass
+                self.assertTrue(len(x.calls) == 2)
+                self.assertTrue("testdir\\folder0\\test2.py" in x.calls)
+                self.assertTrue("testdir\\folder0" in x.calls)
             elif x.name == "testdir\\test0.py":
                 self.assertTrue(len(x.calls) == 0)
             elif x.name == "testdir\\test1.py":
@@ -85,7 +85,9 @@ class DirToPGraphTesterPython(unittest.TestCase):
                 self.assertTrue(len(x.calls) == 1)
                 self.assertTrue("testdir\\test0.py" in x.calls)
             elif x.name == "testdir\\folder1\\test3.py":
-                self.assertTrue(len(x.calls) == 1)
+                self.assertTrue(len(x.calls) == 2)
+                self.assertTrue("testdir\\folder0\\test2.py" in x.calls)
+                self.assertTrue("testdir\\folder0" in x.calls)
             elif x.name == "testdir\\test4.py":
                 self.assertTrue(len(x.calls) == 1)
                 self.assertTrue("testdir\\test0.py" in x.calls)
