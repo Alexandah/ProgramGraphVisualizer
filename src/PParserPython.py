@@ -28,7 +28,7 @@ class PParserPython(PParserInterface, ast.NodeVisitor):
         #if the aliases aren't registered, then use the item in the from
         found_key = None
         for alias in node.names:
-            found_key = get_key_with_file_in_path(alias.name, self.pgraph_builder.all_nodes)
+            found_key = get_key_with_file_in_path(alias.name+'.py', self.pgraph_builder.all_nodes)
             if found_key is not None:
                 break
 
