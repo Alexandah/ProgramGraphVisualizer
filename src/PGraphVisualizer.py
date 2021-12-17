@@ -9,14 +9,16 @@ class PGraphVisualizer:
 
     def build_nodes_groupby_subgraph(self, node, parent_dir_graph):
         if isinstance(node, FileNode):
-            node_short_name = get_file_name_at_end_of_path(node.name)
-            parent_dir_graph.node(node_short_name, node_short_name)
-            return
+            if node.name in self.pgraph.active_nodes:
+                node_short_name = get_file_name_at_end_of_path(node.name)
+                parent_dir_graph.node(node_short_name, node_short_name)
+                return
         elif isinstance(node, DirNode):
             with parent_dir_graph.subgraph(name='cluster_'+node.name) as sub:
                 sub.attr(label=get_file_name_at_end_of_path(node.name))
                 #define the nodes in this subgraph
-                for defined_node in [x for x in node.defines.values() if x in self.pgraph.active_nodes.values()]:
+                active_defs = [x for x in node.defines.values() if x in self.pgraph.active_nodes.values()]
+                for defined_node in active_defs:
                     node_short_name = get_file_name_at_end_of_path(defined_node.name)
                     sub.node(node_short_name, node_short_name)
                 #do for child dirs
@@ -38,10 +40,10 @@ class PGraphVisualizer:
 
     def visualize(self):
         graph = graphviz.Digraph(format='png')
-        if self.group_by_dir and self.pgraph.mode != 'dir':
+        if self.group_by_dir:
             self.build_nodes_groupby_subgraph(self.pgraph.root, graph)
         else:
-            self.build_nodes_ungrouped(self.pgraph)
+            self.build_nodes_ungrouped(graph)
 
         self.build_edges(graph)
 
