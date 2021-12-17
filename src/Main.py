@@ -5,6 +5,6 @@ import os
 if __name__ == "__main__":
     root_dir = os.getcwd()
     pgraph = PParserPython(root_dir)()
-    pgraph.file_mode()
+    pgraph.dir_mode()
     PGraphVisualizer(pgraph).visualize()
 
