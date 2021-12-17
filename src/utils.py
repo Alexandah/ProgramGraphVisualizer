@@ -1,6 +1,4 @@
-LINUX_SLASH = '/'
-WINDOWS_SLASH = '\\'
-FILE_SLASH = LINUX_SLASH
+from constants import FILE_SLASH
 
 def get_file_name_at_end_of_path(path):
     """

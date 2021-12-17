@@ -1,10 +1,7 @@
 import unittest
 from PParserPython import PParserPython
 from PNode import FileNode, DirNode
-
-LINUX_SLASH = '/'
-WINDOWS_SLASH = '\\'
-FILE_SLASH = LINUX_SLASH
+from constants import FILE_SLASH
 
 class DirToPGraphTesterPython(unittest.TestCase):
     @classmethod
