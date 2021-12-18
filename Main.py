@@ -5,7 +5,7 @@ import argparse
 from src.PNode import DirNode, FileNode
 
 if __name__ == "__main__":
-    argparser = argparse.ArgumentParser(description='Creates and displays a diagram of the import dependencies between all entities within the parent dir.')
+    argparser = argparse.ArgumentParser(description='Creates and displays a diagram of the import dependencies between all entities within the parent dir. By default, everything is visible. Disable entities to create the kind of diagram you want.')
     argparser.add_argument('-ndg', '--nodirgroup', help='Turns off grouping items by directory.', action='store_true')
     argparser.add_argument('-x', '--exclude', nargs='+', help='Excludes entities within a list of names from the diagram.')
     argparser.add_argument('-xt', '--excludetype', nargs='+', help='Excludes named entities of a certain type (dir, file) from the diagram.')
