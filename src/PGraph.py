@@ -15,9 +15,10 @@ class PGraph:
             if ancestor.name in self.active_nodes:
                 self.active_nodes.pop(ancestor.name)
 
-        key = get_key_with_file_in_path(parent_name, self.active_nodes)
+        #does not assume that every member of the family is currently active  
+        key = get_key_with_file_in_path(parent_name, self.all_nodes)
         if key is not None:
-            familicide(self.active_nodes[key])
+            familicide(self.all_nodes[key])
             self.mode = '?'
 
     def deactivate_by_name(self, filename):

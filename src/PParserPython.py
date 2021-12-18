@@ -1,7 +1,7 @@
 from src.PParserInterface import PParserInterface
 from src.PNode import FileNode
 import ast
-from src.utils import get_key_with_file_in_path
+from src.utils import get_key_with_file_in_path, get_module_name
 
 class PParserPython(PParserInterface, ast.NodeVisitor):
     def __init__(self, path):
@@ -33,7 +33,8 @@ class PParserPython(PParserInterface, ast.NodeVisitor):
                 break
 
         if found_key is None:
-            found_key = get_key_with_file_in_path(node.module, self.pgraph_builder.all_nodes)
+            module_name = get_module_name(node.module)+'.py'
+            found_key = get_key_with_file_in_path(module_name, self.pgraph_builder.all_nodes)
 
         if found_key is not None:
             imported_file = self.pgraph_builder.all_nodes[found_key]

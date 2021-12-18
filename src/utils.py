@@ -1,5 +1,11 @@
 from src.constants import FILE_SLASH
 
+def get_module_name(module_import_from):
+    """
+    Returns the module name from a module import statement.
+    """
+    return module_import_from.split(".")[-1]
+
 def get_file_name_at_end_of_path(path):
     """
     Returns the file name at the end of a path.
