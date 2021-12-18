@@ -10,10 +10,6 @@ class PGraph:
 
     def deactivate_family(self, parent_name):
         def familicide(ancestor):
-            if len(ancestor.defines) == 0:
-                if ancestor.name in self.active_nodes:
-                    self.active_nodes.pop(ancestor.name)
-                return
             for definition in ancestor.defines.values():
                 familicide(definition)
             if ancestor.name in self.active_nodes:
