@@ -1,7 +1,7 @@
-from PParserInterface import PParserInterface
-from PNode import FileNode
+from src.PParserInterface import PParserInterface
+from src.PNode import FileNode
 import ast
-from utils import get_key_with_file_in_path
+from src.utils import get_key_with_file_in_path
 
 class PParserPython(PParserInterface, ast.NodeVisitor):
     def __init__(self, path):

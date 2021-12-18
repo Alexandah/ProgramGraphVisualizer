@@ -1,4 +1,4 @@
-from PGraph import PGraph
+from src.PGraph import PGraph
 
 class PGraphBuilder:
     def __init__(self):

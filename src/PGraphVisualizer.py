@@ -1,6 +1,6 @@
 import graphviz
-from utils import get_file_name_at_end_of_path
-from PNode import DirNode, FileNode
+from src.utils import get_file_name_at_end_of_path
+from src.PNode import DirNode, FileNode
 
 class PGraphVisualizer:
     def __init__(self, pgraph):

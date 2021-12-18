@@ -1,7 +1,7 @@
 import unittest
-from PParserPython import PParserPython
-from PNode import FileNode, DirNode
-from constants import FILE_SLASH
+from src.PParserPython import PParserPython
+from src.PNode import FileNode, DirNode
+from src.constants import FILE_SLASH
 
 class DirToPGraphTesterPython(unittest.TestCase):
     @classmethod

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from PNode import DirNode, FileNode 
-from PGraphBuilder import PGraphBuilder
+from src.PNode import DirNode, FileNode 
+from src.PGraphBuilder import PGraphBuilder
 import os
 
 class PParserInterface(ABC):

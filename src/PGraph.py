@@ -1,5 +1,5 @@
-from PNode import DirNode, FileNode
-from utils import get_key_with_file_in_path
+from src.PNode import DirNode, FileNode
+from src.utils import get_key_with_file_in_path
 
 class PGraph:
     def __init__(self, root, all_nodes):
@@ -7,6 +7,22 @@ class PGraph:
         self.all_nodes = all_nodes
         self.active_nodes = {k: v for k, v in self.all_nodes.items()}
         self.mode = None
+
+    def deactivate_family(self, parent_name):
+        def familicide(ancestor):
+            if len(ancestor.defines) == 0:
+                if ancestor.name in self.active_nodes:
+                    self.active_nodes.pop(ancestor.name)
+                return
+            for definition in ancestor.defines.values():
+                familicide(definition)
+            if ancestor.name in self.active_nodes:
+                self.active_nodes.pop(ancestor.name)
+
+        key = get_key_with_file_in_path(parent_name, self.active_nodes)
+        if key is not None:
+            familicide(self.active_nodes[key])
+            self.mode = '?'
 
     def deactivate_by_name(self, filename):
         key = get_key_with_file_in_path(filename, self.active_nodes)

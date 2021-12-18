@@ -1,4 +1,4 @@
-from constants import FILE_SLASH
+from src.constants import FILE_SLASH
 
 def get_file_name_at_end_of_path(path):
     """

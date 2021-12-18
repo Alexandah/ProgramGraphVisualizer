@@ -1,14 +1,15 @@
-from PParserPython import PParserPython
-from PGraphVisualizer import PGraphVisualizer
+from src.PParserPython import PParserPython
+from src.PGraphVisualizer import PGraphVisualizer
 import os
 import argparse
-from PNode import DirNode, FileNode
+from src.PNode import DirNode, FileNode
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser(description='Creates and displays a diagram of the import dependencies between all entities within the parent dir.')
     argparser.add_argument('-ndg', '--nodirgroup', help='Turns off grouping items by directory.', action='store_true')
     argparser.add_argument('-x', '--exclude', nargs='+', help='Excludes entities within a list of names from the diagram.')
-    argparser.add_argument('-xt', '--excludetype', nargs='+', help='Excludes entities of a certain type (dir, file) from the diagram.')
+    argparser.add_argument('-xt', '--excludetype', nargs='+', help='Excludes named entities of a certain type (dir, file) from the diagram.')
+    argparser.add_argument('-xf', '--excludefamily', nargs='+', help='Excludes named nodes and their children from the diagram.')
     args = argparser.parse_args()
 
     root_dir = os.getcwd()
@@ -27,6 +28,10 @@ if __name__ == "__main__":
     if args.exclude:
         for name in args.exclude:
             pgraph.deactivate_by_name(name)
+
+    if args.excludefamily:
+        for ancestor in args.excludefamily:
+            pgraph.deactivate_family(ancestor)
 
     viz = PGraphVisualizer(pgraph)
     if args.nodirgroup:
