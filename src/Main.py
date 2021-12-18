@@ -24,6 +24,9 @@ if __name__ == "__main__":
                 type = str_to_node_type[typestr]
                 pgraph.deactivate_type(type)
 
+    if args.exclude:
+        for name in args.exclude:
+            pgraph.deactivate_by_name(name)
 
     viz = PGraphVisualizer(pgraph)
     if args.nodirgroup:

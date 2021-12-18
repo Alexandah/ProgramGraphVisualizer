@@ -1,4 +1,5 @@
 from PNode import DirNode, FileNode
+from utils import get_key_with_file_in_path
 
 class PGraph:
     def __init__(self, root, all_nodes):
@@ -6,6 +7,18 @@ class PGraph:
         self.all_nodes = all_nodes
         self.active_nodes = {k: v for k, v in self.all_nodes.items()}
         self.mode = None
+
+    def deactivate_by_name(self, filename):
+        key = get_key_with_file_in_path(filename, self.active_nodes)
+        if key is not None:
+            self.active_nodes.pop(key)
+            self.mode = '?'
+
+    def activate_by_name(self, filename):
+        key = get_key_with_file_in_path(filename, self.active_nodes)
+        if key is not None:
+            self.active_nodes[key] = self.all_nodes[key]
+            self.mode = '?'
 
     def deactivate_type(self, type):
         self.active_nodes = {name:node for name,node in self.active_nodes.items() if not isinstance(node, type)}
