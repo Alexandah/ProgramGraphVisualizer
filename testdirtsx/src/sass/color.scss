@@ -1,0 +1,56 @@
+$pw-color-bg-secondary: #f4f4f5; // #f7f7f7;
+$rr-color-black: #73879C;
+$rr-color-dark: #466382;
+
+// Element Background 
+$pw-color-bg-button: #617fde;
+$cl-color-gb-gray: #DCDCDC;
+$pw-color-side-bar: #2A3F54; //#f0f0f0;
+$cl-color-hover-panel: #2a5987;
+$rr-color-gray-f2: #f2f2f2;
+
+
+// Text 
+$brand-darker: #444;
+$cl-color-text-peter-aerts: #777;
+$cl-color-text-gray: #73879c;
+$cl-color-text-gray-ccc: #ccc;
+$cl-color-black: #73879C;
+$pw-color-button-text: #666666;
+$cl-color-green: #1abb9c;
+$placeholder-text: #bbbbbb;
+$cl-color-text-panel2: rgba(255, 255, 255, 0.75); // #e7e7e7;
+$cl-color-text-panel1: #e7e7e7; // #F2F5F7;
+$rr-color-blue-nav: #1983FF;
+$rr-color-main:#617fde;
+$rr-color-main-dark:#516ab3;
+
+$c-coral: #E89025;
+
+.rr-color-bg-gray-f2 {
+    background-color: $rr-color-gray-f2;
+}
+
+.cl-color-green {
+    color: $cl-color-green;
+}
+
+.pw-color-bg-secondary {
+    background-color: $pw-color-bg-secondary;
+}
+
+.pw-color-bg-button {
+    background-color: $pw-color-bg-button;
+}
+
+.c-coral {
+    color: $c-coral;
+}
+
+.cl-color-button {
+    color: $pw-color-bg-button;
+}
+
+.cl-color-black {
+    color: $cl-color-black;
+}

@@ -1,0 +1,38 @@
+.sl-button {
+    border-radius: 2rem;
+    border-width: 0;
+    font-size: 1rem;
+    font-family: os6; // padding: 3rem 4÷rem;
+    text-transform: uppercase;
+    background-color: $pw-color-bg-button;
+    color: white;
+
+    &:hover,
+    &:focus,
+    &:active {
+        color: white;
+        background-color: #728ee2
+    }
+}
+
+.sl-button-export {
+    @extend .sl-button;
+    font-weight: 600; // letter-spacing: 1px;
+    padding: 0.8rem 2rem;
+}
+
+.cl-position-absolute {
+    @extend .position-absolute;
+    bottom: 0;
+    right: 0;
+    margin-right: 3rem;
+    margin-bottom: 3rem;
+}
+
+.cl-position-left {
+    @extend .position-absolute;
+    bottom: 0;
+    left: 0;
+    margin-left: 3rem;
+    margin-bottom: 3rem;
+}

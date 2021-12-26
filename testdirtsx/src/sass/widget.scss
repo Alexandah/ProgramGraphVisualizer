@@ -1,0 +1,53 @@
+@import "color.scss";
+
+
+.sl-count {
+    @extend .text-center;
+
+    .green {
+        color: $cl-color-green
+    }
+
+    .red {
+        color: rgb(231, 76, 60);
+    }
+
+    div:hover {
+        color: $brand-darker;
+        cursor: pointer;
+    }
+
+    .tile_stats_count {
+        .count {
+            font-size: 3rem;
+            line-height: 3.5rem;
+            font-weight: 600
+        }
+
+        .count-bottom {
+            margin-bottom: 2rem;
+        }
+
+        .count-top {
+            // margin-bottom: 19rem;
+            font-size: 1rem;
+
+            i {
+                font-size: 1.1rem;
+            }
+        }
+
+        margin-bottom: 3.5rem;
+    }
+
+    margin-top: 20px;
+    color: $cl-color-black;
+    font-family: "Helvetica Neue",
+    Roboto,
+    sans-serif;
+
+}
+
+.sl-count .tile_stats_count span {
+    font-size: 12px
+}

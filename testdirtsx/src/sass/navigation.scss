@@ -1,0 +1,75 @@
+@import "color.scss";
+
+.sl-navbar {
+  span {
+    font-size: 1.4rem;
+  }
+
+  .rText {
+    vertical-align: middle;
+    display: inline-block;
+    margin-right: 0.4rem;
+    margin-bottom: 0.6rem;
+    text-align: right;
+  }
+
+  .lText {
+    vertical-align: middle;
+    display: inline-block;
+    margin-bottom: 0.6rem;
+  }
+}
+
+.rr-navbar {
+  @extend .navbar;
+
+  span {
+    font-size: 1.6rem;
+  }
+
+  i {
+    font-size: 1.6rem;
+  }
+
+  .title {
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    max-width: 55%;
+    overflow: hidden;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+
+  .rText {
+    vertical-align: middle;
+    display: inline-block;
+    margin-right: 0.4rem;
+    margin-bottom: 0.6rem;
+    text-align: right;
+  }
+
+  .lText {
+    vertical-align: middle;
+    display: inline-block;
+    margin-bottom: 0.6rem;
+  }
+
+  .lButton {
+    @extend .btn;
+    @extend .btn-link;
+    margin-left: -1rem;
+    margin-bottom: -0.7rem;
+  }
+
+  .rButton {
+    margin-right: -1rem;
+    margin-bottom: -0.7rem;
+
+    .fo {
+
+      margin-right: 1rem;
+    }
+
+  }
+}

@@ -1,4 +1,5 @@
 from src.PParserPython import PParserPython
+from src.PParserTypescript import PParserTypescript
 from src.PGraphVisualizer import PGraphVisualizer
 import os
 import argparse
@@ -13,7 +14,8 @@ if __name__ == "__main__":
     args = argparser.parse_args()
 
     root_dir = os.getcwd()
-    pgraph = PParserPython(root_dir)()
+    # pgraph = PParserPython(root_dir)()
+    pgraph = PParserTypescript(root_dir)()
 
     if args.excludetype:
         str_to_node_type = {

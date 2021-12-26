@@ -1,0 +1,91 @@
+$btn-padding-x-xs: .20rem !default;
+$btn-padding-y-xs: .12rem !default;
+$input-btn-line-height-xs: 1.4 !default;
+
+.btn.btn-xs {
+  height: 1.92rem;
+}
+
+.ui-del {
+  //@extend %fa-icon;
+  @extend .btn;
+  @extend .btn-outline-danger;
+  @extend .btn-xs;
+}
+
+.delete-group {
+  margin-left: 0.5rem;
+  @extend .ui-del;
+}
+
+.ui-add {
+  margin-left: 0.5rem;
+  @extend .btn;
+  @extend .btn-outline-success;
+  @extend .btn-xs;
+}
+
+.add-group {
+  margin-left: 0.5rem;
+  @extend .btn;
+  @extend .btn-outline-primary;
+  @extend .btn-xs;
+}
+
+.first {
+  //background: red;
+  width: 2rem;
+  margin-left: 1rem;
+}
+
+.ui-resizable-handle {
+  visibility: hidden;
+}
+
+.ui-jqgrid {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.ui-jqgrid tr.jqgrow td {
+  font-size: 1.0rem
+}
+
+.ui-jqgrid-view {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.ui-jqgrid-hdiv {
+  width: 100% !important;
+}
+
+.ui-jqgrid-bdiv {
+  width: 100% !important;
+}
+
+.ui-jqgrid-pager {
+  width: 100% !important;
+}
+
+
+.ui-jqgrid .ui-jqgrid-htable th {
+  height: 1.8rem !important;
+}
+.ui-jqgrid tr.jqgrow td{
+  height: 2rem !important;
+}
+
+//Wrap text in long columns
+.ui-jqgrid tr.jqgrow td {
+  word-wrap: break-word; /* IE 5.5+ and CSS3 */
+  white-space: pre-wrap; /* CSS3 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  overflow: hidden;
+  height: auto;
+  vertical-align: middle;
+  padding-top: 3px;
+  padding-bottom: 3px
+}
