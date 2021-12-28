@@ -12,6 +12,7 @@ class PParserInterface(ABC):
         return self.parse()
 
     def parse(self):
+        print('~~~FIRST PASS~~~')
         #First pass handles defs
         for rootdir, dirs, files in os.walk(self.path):
             rootdirnode = self.pgraph_builder.add_node(DirNode(rootdir))
@@ -22,6 +23,7 @@ class PParserInterface(ABC):
             for file in files:
                 self.parse_file_defs(os.path.join(rootdir, file), rootdirnode)
 
+        print('~~~SECOND PASS~~~')
         #Second pass handles calls
         for rootdir, dirs, files in os.walk(self.path):
             #We only have to check the lowest level because
